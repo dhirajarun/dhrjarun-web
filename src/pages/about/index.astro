@@ -1,0 +1,14 @@
+---
+import { getCollection } from "astro:content";
+
+const abouts = await getCollection("about");
+
+abouts.sort(
+  (after, before) =>
+    before.data.publishDate?.getTime() - after.data.publishDate?.getTime(),
+);
+
+const path = abouts[0].id;
+
+return Astro.rewrite(`/about/${path}`);
+---

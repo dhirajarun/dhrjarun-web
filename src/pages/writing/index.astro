@@ -1,0 +1,34 @@
+---
+import Page from '../../components/Page.astro';
+import ThreeColumnLayout from '../../components/ThreeColumnLayout.astro';
+import PrimaryHeader from '../../components/PrimaryHeader.astro';
+import { getCollection } from 'astro:content';
+
+const writings = await getCollection("writing")
+
+writings.sort((after, before) => before.data.publishDate?.getTime() - after.data.publishDate?.getTime())
+---
+
+<Page title="Posts">
+  <ThreeColumnLayout>
+    <div class="center">
+      <PrimaryHeader activeURL="/writing" />
+      <section class="space-y-2.5 sm:space-y-1">
+        <h2 class="mb-3">Recents</h2>
+        {
+            writings?.map((item) => (<div class="flex items-baseline flex-col sm:flex-row">
+             <p class="text-xs mr-4">
+                {item.data.publishDate?.toLocaleDateString('en-in', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                  }).split('/').reverse().join('-')}
+                {}
+              </p>
+              <a href={`/writing/${item.id}`}>{item.data.title}</a>{' '}
+            </div>))
+          }
+      </section>
+    </div>
+  </ThreeColumnLayout>
+</Page>

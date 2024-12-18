@@ -1,0 +1,79 @@
+---
+import Page from "../../components/Page.astro";
+import WritingContent from "../../components/WritingContent.astro";
+import TableOfContents from "../../components/TableOfContent/TableOfContent.astro";
+import Sidebar from "../../components/Sidebar.astro";
+import ThreeColumnLayout from "../../components/ThreeColumnLayout.astro";
+import PageHeading from "../../components/PageHeading.astro";
+import PageTitle from "../../components/PageTitle.astro";
+import GiscusComments from "../../components/GiscusComments.astro";
+import { getCollection, render } from "astro:content";
+import getReadingTime from "reading-time";
+
+export const prerender = true;
+
+// TODO: add TableOfContent
+
+export async function getStaticPaths() {
+  const writings = await getCollection("writing");
+
+  return writings.map((writing) => {
+    return {
+      params: { slug: writing.id },
+      props: {
+        writing,
+      },
+    };
+  });
+}
+
+const { writing } = Astro.props;
+const { Content, headings } = await render(writing);
+
+const { title, publishDate } = writing.data;
+const readingTime = getReadingTime(writing.body ?? "")?.text || "";
+---
+
+<Page title={title}>
+  <ThreeColumnLayout>
+    <main class="center">
+      <PageHeading>
+        <a class="text-sm" href="/writing">Back to writing</a>
+        <PageTitle>{title}</PageTitle>
+
+        <div class="text-sm text-gray-400 dark:text-gray-400 flex space-x-3">
+          <span
+            >{
+              publishDate.toLocaleDateString("en-us", {
+                year: "numeric",
+                month: "short",
+                day: "2-digit",
+              })
+            }</span
+          >
+          <span>@dhrjarun</span>
+          <span>{readingTime}</span>
+        </div>
+      </PageHeading>
+      <WritingContent>
+        <Content />
+      </WritingContent>
+
+      <div class="text-center my-8">
+        ..............................................
+      </div>
+      <GiscusComments />
+    </main>
+    <aside class="right">
+      <Sidebar>
+        <TableOfContents headings={headings} label="Table Of Content" />
+      </Sidebar>
+    </aside>
+  </ThreeColumnLayout>
+</Page>
+
+<style is:global>
+  .sidebar {
+    @apply fixed top-20 pl-5;
+  }
+</style>

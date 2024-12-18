@@ -1,0 +1,14 @@
+---
+import { getCollection } from "astro:content";
+
+const nows = await getCollection("now");
+
+nows.sort(
+  (after, before) =>
+    before.data.publishDate?.getTime() - after.data.publishDate?.getTime(),
+);
+
+const path = nows[0].id;
+
+return Astro.rewrite(`/now/${path}`);
+---

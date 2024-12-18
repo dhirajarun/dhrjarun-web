@@ -1,0 +1,73 @@
+---
+import Page from "../../components/Page.astro";
+import PageHeading from "../../components/PageHeading.astro";
+import PageTitle from "../../components/PageTitle.astro";
+import ThreeColumnLayout from "../../components/ThreeColumnLayout.astro";
+import TableOfContents from "../../components/TableOfContent/TableOfContent.astro";
+import WritingContent from "../../components/WritingContent.astro";
+import Sidebar from "../../components/Sidebar.astro";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const abouts = await getCollection("about");
+
+  abouts.sort(
+    (after, before) =>
+      before.data.publishDate?.getTime() - after.data.publishDate?.getTime(),
+  );
+
+  const renders = abouts.map((about) => {
+    return {
+      params: { slug: about.id },
+      props: {
+        about,
+      },
+    };
+  });
+
+  return renders;
+}
+
+const { about } = Astro.props;
+const { publishDate } = about.data;
+const { Content, headings } = await render(about);
+
+export const prerender = true;
+---
+
+<Page title="About">
+  <ThreeColumnLayout>
+    <main class="center">
+      <PageHeading>
+        <a class="text-sm" href="/">Back to Home</a>
+        <PageTitle>About</PageTitle>
+
+        <div class="text-sm text-gray-400 dark:text-gray-400 flex space-x-3">
+          <span
+            >{
+              publishDate.toLocaleDateString("en-us", {
+                year: "numeric",
+                month: "short",
+                day: "2-digit",
+              })
+            }</span
+          >
+        </div>
+      </PageHeading>
+      <WritingContent>
+        <Content />
+      </WritingContent>
+    </main>
+    <aside class="right">
+      <Sidebar>
+        <TableOfContents headings={headings} label="Table Of Content" />
+      </Sidebar>
+    </aside>
+  </ThreeColumnLayout>
+</Page>
+
+<style is:global>
+  .sidebar {
+    @apply fixed top-20 pl-5;
+  }
+</style>
