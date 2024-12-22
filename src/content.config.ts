@@ -1,9 +1,9 @@
+import { file, glob } from 'astro/loaders';
 import { defineCollection, z } from 'astro:content';
-import { glob } from 'astro/loaders';
 import {
   CONTENT_PATH,
 } from 'astro:env/server';
-import { join } from 'path'
+import { join } from 'path';
 
 
 const writing = defineCollection({
@@ -13,6 +13,19 @@ const writing = defineCollection({
     publishDate: z.date(),
     draft: z.boolean().optional().default(false),
     archive: z.boolean().optional().default(false),
+  }).passthrough(),
+});
+
+const projects = defineCollection({
+  loader: glob({
+    pattern: "*.md", base: join(CONTENT_PATH, "/projects"),
+  }),
+  schema: z.object({
+    title: z.string(),
+    lastUpdated: z.date().optional(),
+    start: z.number(),
+    end: z.number().optional().nullable(),
+    descriptions: z.string(),
   }).passthrough(),
 });
 
@@ -34,4 +47,8 @@ const now = defineCollection({
   }).passthrough(),
 });
 
-export const collections = { writing, about, now };
+const root = defineCollection({
+  loader: glob({ pattern: "*.md", base: join(CONTENT_PATH, "/") }),
+});
+
+export const collections = { writing, projects, about, now, root };

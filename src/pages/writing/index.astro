@@ -3,8 +3,9 @@ import Page from '../../components/Page.astro';
 import ThreeColumnLayout from '../../components/ThreeColumnLayout.astro';
 import PrimaryHeader from '../../components/PrimaryHeader.astro';
 import { getCollection } from 'astro:content';
+import { draftCollectionFilter } from '../../utils';
 
-const writings = await getCollection("writing")
+const writings = await getCollection("writing", draftCollectionFilter);
 
 writings.sort((after, before) => before.data.publishDate?.getTime() - after.data.publishDate?.getTime())
 ---

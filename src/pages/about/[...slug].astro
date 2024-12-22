@@ -7,9 +7,10 @@ import TableOfContents from "../../components/TableOfContent/TableOfContent.astr
 import WritingContent from "../../components/WritingContent.astro";
 import Sidebar from "../../components/Sidebar.astro";
 import { getCollection, render } from "astro:content";
+import { draftCollectionFilter } from "../../utils";
 
 export async function getStaticPaths() {
-  const abouts = await getCollection("about");
+  const abouts = await getCollection("about", draftCollectionFilter);
 
   abouts.sort(
     (after, before) =>
@@ -23,6 +24,13 @@ export async function getStaticPaths() {
         about,
       },
     };
+  });
+
+  renders.push({
+    params: { slug: undefined as any },
+    props: {
+      about: abouts[0],
+    },
   });
 
   return renders;

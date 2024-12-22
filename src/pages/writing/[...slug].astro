@@ -9,13 +9,12 @@ import PageTitle from "../../components/PageTitle.astro";
 import GiscusComments from "../../components/GiscusComments.astro";
 import { getCollection, render } from "astro:content";
 import getReadingTime from "reading-time";
+import { draftCollectionFilter } from "../../utils";
 
 export const prerender = true;
 
-// TODO: add TableOfContent
-
 export async function getStaticPaths() {
-  const writings = await getCollection("writing");
+  const writings = await getCollection("writing", draftCollectionFilter);
 
   return writings.map((writing) => {
     return {
