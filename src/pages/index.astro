@@ -29,23 +29,24 @@ const { Content: Bio } = await render(bio);
                 day: "2-digit",
               })
             }
-            <span>@dhrjarun</span>
           </span>
-          <WritingContent>
-            <Bio />
-          </WritingContent>
+          <span>@dhrjarun</span>
+        </div>
 
-          <div class="space-x-4 text-sm">
-            <a href="/about">About</a>
-            <a href="/now">Now</a>
-            {
-              Object.entries(bio.data.links).map(([label, link]) => (
-                <BlankLink href={link} target="_blank">
-                  {label}
-                </BlankLink>
-              ))
-            }
-          </div>
+        <WritingContent>
+          <Bio />
+        </WritingContent>
+
+        <div class="space-x-4 text-sm mt-2">
+          <a href="/about">About</a>
+          <a href="/now">Now</a>
+          {
+            Object.entries(bio.data.links).map(([label, link]) => (
+              <BlankLink href={link} target="_blank">
+                {label}
+              </BlankLink>
+            ))
+          }
         </div>
       </section>
     </div>
