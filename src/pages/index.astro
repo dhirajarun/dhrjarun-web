@@ -21,23 +21,31 @@ const { Content: Bio } = await render(bio);
         <div
           class="text-sm text-gray-400 dark:text-gray-400 flex space-x-3 mb-2"
         >
-          <span>{bio.data?.lastUpdated}</span>
-          <span>@dhrjarun</span>
-        </div>
-        <WritingContent>
-          <Bio />
-        </WritingContent>
+          <span>
+            {
+              bio.data?.lastUpdated.toLocaleDateString("en-us", {
+                year: "numeric",
+                month: "short",
+                day: "2-digit",
+              })
+            }
+            <span>@dhrjarun</span>
+          </span>
+          <WritingContent>
+            <Bio />
+          </WritingContent>
 
-        <div class="space-x-4 text-sm">
-          <a href="/about">About</a>
-          <a href="/now">Now</a>
-          {
-            Object.entries(bio.data.links).map(([label, link]) => (
-              <BlankLink href={link} target="_blank">
-                {label}
-              </BlankLink>
-            ))
-          }
+          <div class="space-x-4 text-sm">
+            <a href="/about">About</a>
+            <a href="/now">Now</a>
+            {
+              Object.entries(bio.data.links).map(([label, link]) => (
+                <BlankLink href={link} target="_blank">
+                  {label}
+                </BlankLink>
+              ))
+            }
+          </div>
         </div>
       </section>
     </div>
