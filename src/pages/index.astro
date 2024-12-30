@@ -19,19 +19,6 @@ const { Content: Bio } = await render(bio);
         <WritingContent>
           <Bio />
         </WritingContent>
-
-        <div class="space-x-4 text-sm mt-2">
-          <a href="/about">About</a>
-          <a href="/now">Now</a>
-          <a href="/rss.xml">RSS</a>
-          {
-            Object.entries(bio.data.links).map(([label, link]) => (
-              <BlankLink href={link} target="_blank">
-                {label}
-              </BlankLink>
-            ))
-          }
-        </div>
       </section>
     </div>
   </ThreeColumnLayout>
