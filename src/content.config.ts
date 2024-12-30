@@ -5,7 +5,6 @@ import {
 } from 'astro:env/server';
 import { join } from 'path';
 
-
 const writing = defineCollection({
   loader: glob({ pattern: "*.md", base: join(CONTENT_PATH, "/Writing") }),
   schema: z.object({
@@ -41,7 +40,7 @@ const about = defineCollection({
 const now = defineCollection({
   loader: glob({ pattern: "*.md", base: join(CONTENT_PATH, "/Now") }),
   schema: z.object({
-    publishDate: z.date(),
+    publishDate: z.date().optional(),
     lastUpdated: z.date().optional(),
     draft: z.boolean().optional(),
   }).passthrough(),

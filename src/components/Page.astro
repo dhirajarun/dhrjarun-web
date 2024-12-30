@@ -27,6 +27,12 @@ const { title, description = "" } = Astro.props;
       content="wszeuffUBHaFXLPVwpoRa4qx08GBEC83T5cExxWrylI"
     />
     <title>{title} - dhrjarun</title>
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="Dhiraj Arun"
+      href={new URL("rss.xml", Astro.site)}
+    />
     <ClientRouter />
   </head>
   <body>

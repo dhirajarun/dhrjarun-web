@@ -1,1 +1,19 @@
-<footer class="mt-[800px]"></footer>
+---
+import { getEntry } from "astro:content";
+import BlankLink from "./BlankLink.astro";
+
+const bio = await getEntry("root", "bio")!;
+---
+
+<footer class="flex justify-center space-x-4 py-5 text-sm">
+  <a href="/about">About</a>
+  <a href="/now">Now</a>
+  <a href="/rss.xml">RSS</a>
+  {
+    Object.entries(bio.data.links).map(([label, link]) => (
+      <BlankLink href={link} target="_blank">
+        {label}
+      </BlankLink>
+    ))
+  }
+</footer>

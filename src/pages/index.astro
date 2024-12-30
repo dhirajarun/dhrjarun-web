@@ -15,24 +15,7 @@ const { Content: Bio } = await render(bio);
     <div class="center">
       <PrimaryHeader activeURL="/" />
 
-      <section
-        class="p-3 border border-gray-300 dark:border-gray-600 rounded-md mb-8"
-      >
-        <div
-          class="text-sm text-gray-400 dark:text-gray-400 flex space-x-3 mb-2"
-        >
-          <span>
-            {
-              bio.data?.lastUpdated.toLocaleDateString("en-us", {
-                year: "numeric",
-                month: "short",
-                day: "2-digit",
-              })
-            }
-          </span>
-          <span>@dhrjarun</span>
-        </div>
-
+      <section class="mb-8">
         <WritingContent>
           <Bio />
         </WritingContent>
@@ -40,6 +23,7 @@ const { Content: Bio } = await render(bio);
         <div class="space-x-4 text-sm mt-2">
           <a href="/about">About</a>
           <a href="/now">Now</a>
+          <a href="/rss.xml">RSS</a>
           {
             Object.entries(bio.data.links).map(([label, link]) => (
               <BlankLink href={link} target="_blank">
