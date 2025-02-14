@@ -1,0 +1,37 @@
+---
+import { getCollection, render } from "astro:content";
+import Page from "../../components/Page.astro";
+import ThreeColumnLayout from "../../components/ThreeColumnLayout.astro";
+import PageHeading from "../../components/PageHeading.astro";
+import PageTitle from "../../components/PageTitle.astro";
+import WritingContent from "../../components/WritingContent.astro";
+
+export async function getStaticPaths() {
+  const projects = await getCollection("projects");
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+---
+
+<Page title={project.data.title}>
+  <ThreeColumnLayout>
+    <main class="center">
+      <PageHeading>
+        <a class="text-sm" href="/projects">Back to projects</a>
+        <PageTitle>{project.data.title}</PageTitle>
+
+        <div class="text-sm text-gray-400 dark:text-gray-400">
+          {project.data.start} - {project.data.end ?? "Present"}
+        </div>
+      </PageHeading>
+      <WritingContent>
+        <Content />
+      </WritingContent>
+    </main>
+  </ThreeColumnLayout>
+</Page>

@@ -14,7 +14,8 @@ export async function getStaticPaths() {
 
   nows.sort(
     (after, before) =>
-      before.data.publishDate?.getTime() - after.data.publishDate?.getTime(),
+      (before.data.publishDate?.getTime() ?? 0) -
+      (after.data.publishDate?.getTime() ?? 0),
   );
 
   const renders = nows.map((now) => {
@@ -27,7 +28,7 @@ export async function getStaticPaths() {
   });
 
   renders.push({
-    params: { slug: undefined as any },
+    params: { slug: undefined as unknown as string },
     props: {
       now: nows[0],
     },

@@ -27,7 +27,7 @@ export async function getStaticPaths() {
   });
 
   renders.push({
-    params: { slug: undefined as any },
+    params: { slug: undefined as unknown as string },
     props: {
       about: abouts[0],
     },

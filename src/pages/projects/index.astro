@@ -1,0 +1,37 @@
+---
+import Page from "../../components/Page.astro";
+import ThreeColumnLayout from "../../components/ThreeColumnLayout.astro";
+import PrimaryHeader from "../../components/PrimaryHeader.astro";
+import { getCollection } from "astro:content";
+
+const projects = await getCollection("projects");
+
+const sortedProjects = projects.sort((a, b) => b.data.start - a.data.start);
+
+---
+
+<Page title="Projects">
+  <ThreeColumnLayout>
+    <div class="center">
+      <PrimaryHeader activeURL="/projects" />
+      <section class="space-y-2.5 sm:space-y-1">
+        <h1>Projects</h1>
+        {
+          sortedProjects.map((project) => (
+            <div class="py-3">
+              <a href={`/projects/${project?.id}`} class="flex space-x-2 hover:no-underline">
+                <h2>{project?.data.title}</h2>
+                <p class="text-white">
+                  {project?.data.start} - {project?.data.end ?? "Present"}
+                </p>
+              </a>
+              <p class="text-light-tx-2 dark:text-dark-tx-2">
+                {project?.data.descriptions}
+              </p>
+            </div>
+          ))
+        }
+      </section>
+    </div>
+  </ThreeColumnLayout>
+</Page>
