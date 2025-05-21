@@ -1,0 +1,24 @@
+---
+import Page from "../components/Page.astro";
+import WritingContent from "../components/WritingContent.astro";
+import TCLayout from "../components/TCLayout.astro";
+import ArticleHeader from "../components/ArticleHeader.astro";
+
+const { data } = Astro.props;
+
+const { title, publishDate, ...rest } = data;
+
+const meta = {
+  publishDate,
+};
+---
+
+<Page title={title}>
+  <TCLayout>
+    <ArticleHeader slot="header" title={title} meta={meta} />
+
+    <WritingContent>
+      <slot />
+    </WritingContent>
+  </TCLayout>
+</Page>

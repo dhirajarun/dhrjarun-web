@@ -1,0 +1,55 @@
+---
+type Props = {
+  links: {key: string, label: string}[];
+};
+
+const { links } = Astro.props;
+---
+
+
+<div class="page-header">
+  <a>
+    DA.
+  </a>
+
+  <nav>
+    <ul>
+      {links.map(link => (
+        <li>
+          <a href={link.key}>
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+</div>
+
+<style>
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  nav {
+    display: flex;
+    gap: 1rem;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  li {
+    display: inline-block;
+  }
+</style>

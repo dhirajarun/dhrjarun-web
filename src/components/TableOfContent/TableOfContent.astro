@@ -1,7 +1,7 @@
 ---
-import type { MarkdownHeading } from 'astro';
-import { generateToC } from './generate-toc';
-import TableOfContentsList from './TableOfContentList.astro';
+import type { MarkdownHeading } from "astro";
+import { generateToC } from "./generate-toc";
+import TableOfContentsList from "./TableOfContentList.astro";
 
 const { label, headings, ...opts } = Astro.props;
 interface Props {
@@ -19,7 +19,7 @@ const toc = generateToC(headings, { minHeadingLevel, maxHeadingLevel });
   toc.length > 0 ? (
     <arun-toc data-min-h={minHeadingLevel} data-max-h={maxHeadingLevel}>
       <nav aria-labelledby="on-this-page">
-        <h2 id="on-this-page">{label}</h2>
+        <span class="toc-title">Table Of Content</span>
         <TableOfContentsList toc={toc} />
       </nav>
     </arun-toc>
@@ -27,3 +27,10 @@ const toc = generateToC(headings, { minHeadingLevel, maxHeadingLevel });
 }
 
 <script src="./arun-toc"></script>
+
+<style>
+  .toc-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+</style>

@@ -1,11 +1,10 @@
 ---
 import Page from "../components/Page.astro";
-import ThreeColumnLayout from "../components/ThreeColumnLayout.astro";
 import WritingContent from "../components/WritingContent.astro";
-import PrimaryHeader from "../components/PrimaryHeader.astro";
 import { getEntry, render } from "astro:content";
+import TCLayout from "../components/TCLayout.astro";
 
-const bio = await getEntry("root", "bio");
+const bio = await getEntry("posts", "bio");
 
 if (!bio) {
   throw new Error("Bio not found");
@@ -15,16 +14,13 @@ const { Content: Bio } = await render(bio);
 ---
 
 <Page title="Home">
-  <ThreeColumnLayout>
-    <div class="center">
-      <PrimaryHeader activeURL="/" />
+  <TCLayout>
+    <header slot="header">
+      <h1>{bio.data.title}</h1>
+    </header>
 
-      <section class="mb-8">
-        <WritingContent>
-          <Bio />
-          <p>Read more about me on my <a href="/about">about</a> and <a href="/now">now</a> pages.</p>
-        </WritingContent>
-      </section>
-    </div>
-  </ThreeColumnLayout>
+    <WritingContent>
+      <Bio />
+    </WritingContent>
+  </TCLayout>
 </Page>

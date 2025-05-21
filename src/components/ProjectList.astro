@@ -1,0 +1,50 @@
+---
+type Props = {
+  projects: {
+    url: string;
+    title: string;
+    meta: {
+      start: string;
+      end?: string;
+    };
+  }[];
+};
+
+const { projects } = Astro.props;
+---
+
+<ul class="project-list">
+  {
+    projects.map((project) => {
+      return (
+        <li class="project-list-item">
+          <div class="project-list-meta">
+            <span aria-label="project duration">{`${project.meta.start} - ${
+              project.meta.end ?? "Present"
+            }`}</span>
+          </div>
+
+          <a href={project.url}>{project.title}</a>
+        </li>
+      );
+    })
+  }
+</ul>
+
+<style>
+  .project-list {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .project-list-item {
+    padding-block: 0.35rem;
+    display: flex;
+  }
+
+  .project-list-meta {
+    font-size: 0.9rem;
+    width: 7.5rem;
+  }
+</style>

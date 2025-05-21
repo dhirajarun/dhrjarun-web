@@ -1,0 +1,30 @@
+---
+import Page from "../components/Page.astro";
+import WritingContent from "../components/WritingContent.astro";
+import GiscusComments from "../components/GiscusComments.astro";
+import TCLayout from "../components/TCLayout.astro";
+import ArticleHeader from "../components/ArticleHeader.astro";
+
+const { data, headings } = Astro.props;
+
+const { title, publishDate, readingTime, ...rest } = data;
+
+const meta = {
+  publishDate,
+  readingTime,
+};
+---
+
+<Page title={title}>
+  <TCLayout>
+    <ArticleHeader slot="header" title={title} meta={meta} />
+
+    <WritingContent>
+      <slot />
+    </WritingContent>
+
+    <!-- <TableOfContents slot="right" headings={headings} label="Table Of Content" /> -->
+
+    <GiscusComments slot="after-body" />
+  </TCLayout>
+</Page>

@@ -1,0 +1,32 @@
+---
+import Page from "../components/Page.astro";
+import WritingContent from "../components/WritingContent.astro";
+import TCLayout from "../components/TCLayout.astro";
+import ArticleHeader from "../components/ArticleHeader.astro";
+import TableOfContents from "../components/TableOfContent/TableOfContent.astro";
+
+const { data, headings } = Astro.props;
+
+const { lastUpdated, publishDate } = data;
+
+const meta = {
+  lastUpdated,
+  publishDate,
+};
+---
+
+<Page title="About">
+  <TCLayout>
+    <ArticleHeader slot="header" title="About" meta={meta} />
+
+    <WritingContent>
+      <slot />
+    </WritingContent>
+
+    <!-- <TableOfContents -->
+    <!--   slot="right" -->
+    <!--   headings={headings} -->
+    <!--   label="Table Of Content" -->
+    <!-- /> -->
+  </TCLayout>
+</Page>

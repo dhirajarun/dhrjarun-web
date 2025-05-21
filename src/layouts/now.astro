@@ -1,0 +1,30 @@
+---
+import Page from "../components/Page.astro";
+import WritingContent from "../components/WritingContent.astro";
+import TCLayout from "../components/TCLayout.astro";
+import ArticleHeader from "../components/ArticleHeader.astro";
+
+const { data } = Astro.props;
+const { lastUpdated } = data;
+
+const meta = {
+  lastUpdated,
+};
+---
+
+<Page title="Now">
+  <TCLayout>
+    <ArticleHeader slot="header" title="Now" meta={meta} />
+    <WritingContent>
+      <p>
+        This is a <a target="_blank" href="https://nownownow.com/about"
+          >now page</a
+        >, and if you have your own site, you should make one, too.
+      </p>
+      <slot />
+    </WritingContent>
+  </TCLayout>
+</Page>
+
+<style is:global></style>
+

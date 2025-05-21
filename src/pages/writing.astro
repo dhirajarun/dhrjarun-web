@@ -1,0 +1,38 @@
+---
+import Page from "../components/Page.astro";
+import { getCollection } from "astro:content";
+import TCLayout from "../components/TCLayout.astro";
+import PostList from "../components/PostList.astro";
+
+export const prerender = true;
+
+const posts = await getCollection("posts", ({ data }) => {
+  if (data.draft) {
+    return false;
+  }
+
+  return data?.category === "writing";
+});
+
+posts.sort(
+  (after, before) =>
+    before.data.publishDate?.getTime() - after.data.publishDate?.getTime(),
+);
+
+const writings = posts.map((post) => {
+  return {
+    url: `/${post.id}`,
+    title: post.data.title,
+    meta: { publishDate: post.data.publishDate },
+    tags: post.data.tags || [],
+  };
+});
+---
+
+<Page title="Posts">
+  <TCLayout>
+    <h1 slot="header">Writing</h1>
+
+    <PostList posts={writings} />
+  </TCLayout>
+</Page>

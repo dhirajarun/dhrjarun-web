@@ -1,0 +1,62 @@
+---
+import clsx from "clsx";
+import Nav from "./Nav.astro";
+import Footer from "./Footer.astro";
+
+const { class: className, ...rest } = Astro.props;
+---
+
+<div class="three-col-layout-container">
+  <div class={clsx(className, "three-col-layout")} {...rest}>
+    <div class="center">
+      <div>
+        <Nav />
+        <slot name="before-header" />
+      </div>
+
+      <slot name="header" />
+
+      <slot name="before-body" />
+      <slot />
+      <slot name="after-body" />
+
+      <Footer />
+    </div>
+
+    <aside class="right">
+      <slot name="right" />
+    </aside>
+  </div>
+</div>
+
+<style>
+  .three-col-layout-container {
+  }
+
+  .three-col-layout {
+    max-width: 1200px;
+    margin-inline: auto;
+    height: 100vh;
+    display: grid;
+    align-items: start;
+    grid-template-rows: auto;
+    grid-template-columns: auto;
+    grid-template-areas: "center";
+
+    @media (min-width: 900px) {
+      grid-template-columns: auto 300px;
+      grid-template-areas: "center right";
+      gap: 2rem;
+    }
+  }
+
+  .three-col-layout > .right {
+    @media (min-width: 900px) {
+      grid-area: right;
+    }
+  }
+
+  .three-col-layout > .center {
+    grid-area: center;
+  }
+</style>

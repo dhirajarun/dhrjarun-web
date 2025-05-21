@@ -11,7 +11,7 @@ const { class: className, ...rest } = Astro.props;
   .three-col-layout {
     display: grid;
     min-height: 100vh;
-    grid-template-columns: 1fr minmax(16ch, 65ch) 1fr;
+    grid-template-columns: 1fr minmax(16ch, 116ch) 1fr;
     grid-template-rows: auto;
     grid-template-areas: "left center right";
     align-items: start;
@@ -24,6 +24,6 @@ const { class: className, ...rest } = Astro.props;
   }
   .three-col-layout > .center {
     grid-area: center;
-    @apply px-4;
+    padding-inline: 16px;
   }
 </style>

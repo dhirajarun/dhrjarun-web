@@ -1,0 +1,60 @@
+---
+type Props = {
+  posts: {
+    url: string;
+    title: string;
+    meta: { publishDate: Date };
+    tags?: string[];
+  }[];
+};
+
+function postDateString(date: Date) {
+  return date.toLocaleDateString("en-us", {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+  });
+}
+
+const { posts } = Astro.props;
+---
+
+<ul class="post-list">
+  {
+    posts.map((post) => {
+      return (
+        <li class="post-list-item">
+          <div class="post-list-meta">
+            <time
+              aria-label="publish date"
+              datetime={post.meta.publishDate.toISOString()}
+            >
+              {postDateString(post.meta.publishDate)}
+            </time>
+          </div>
+          <a href={post.url}>{post.title}</a>
+        </li>
+      );
+    })
+  }
+</ul>
+
+<style>
+  .post-list {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .post-list-item {
+    padding-block: 0.35rem;
+    @media (min-width: 700px) {
+      display: flex;
+    }
+  }
+
+  .post-list-meta {
+    width: 7rem;
+    font-size: 0.9rem;
+  }
+</style>

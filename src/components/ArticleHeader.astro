@@ -1,0 +1,82 @@
+---
+import { PAGE_TITLE_ID } from "../constants";
+
+type Props = {
+  title: string;
+  meta?: {
+    publishDate?: Date;
+    lastUpdated?: Date;
+  } & {
+    [key: string]: string | number;
+  };
+  tags?: string[];
+  name?: string;
+};
+
+const { title, meta = {}, tags = [] } = Astro.props;
+
+const { publishDate, lastUpdated, ...rest } = meta;
+---
+
+<header class="article-header">
+  <h1 class="article-title" id={PAGE_TITLE_ID}>
+    {title}
+  </h1>
+  <div class="article-meta">
+    {
+      publishDate ? (
+        <time datetime={publishDate.toISOString()}>
+          {publishDate.toLocaleDateString("en-us", {
+            year: "numeric",
+            month: "short",
+            day: "2-digit",
+          })}
+        </time>
+      ) : null
+    }
+    {
+      lastUpdated ? (
+        <time datetime={lastUpdated.toISOString()}>
+          last Updated{" "}
+          {lastUpdated.toLocaleDateString("en-us", {
+            year: "numeric",
+            month: "short",
+            day: "2-digit",
+          })}
+        </time>
+      ) : null
+    }
+    {
+      Object.entries(rest).map(([key, value]) => (
+        <span aria-label={key}>{value}</span>
+      ))
+    }
+  </div>
+  {
+    tags.length > 0 ? (
+      <ul class="article-tags">
+        {tags.map((tag) => (
+          <li class="article-tag">{tag}</li>
+        ))}
+      </ul>
+    ) : null
+  }
+</header>
+
+<style is:global>
+  .article-header {
+    margin-block: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .article-title {
+    margin-block: 0px;
+  }
+
+  .article-meta {
+    font-size: 0.9rem;
+    display: flex;
+    gap: 0.7rem;
+  }
+</style>
+

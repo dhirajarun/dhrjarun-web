@@ -2,33 +2,30 @@
 import { getEntry } from "astro:content";
 import BlankLink from "./BlankLink.astro";
 
-const year = new Date().getFullYear();
-
 const bio = await getEntry("posts", "bio");
 
 const links: { label: string; url: string; isExternal: boolean }[] = [];
 
-const footerLinks: Record<string, string> = bio?.data?.["footer-links"] || {};
+const headerLinks: Record<string, string> = bio?.data?.["header-links"] || {};
 
-if (footerLinks) {
-  Object.entries(footerLinks).forEach(([label, url]) => {
+if (headerLinks) {
+  Object.entries(headerLinks).forEach(([label, url]) => {
     links.push({ label, url, isExternal: url.startsWith("http") });
   });
 }
 ---
 
-<footer>
-  <p>© {year} Dhiraj Arun.</p>
-  <ul class="footer-link-list">
+<nav>
+  <ul class="nav-list">
     {
       links.map(({ label, url, isExternal }) => (
-        <li class="footer-link-item">
+        <li class="nav-item">
           {isExternal ? (
-            <BlankLink class="footer-link" href={url}>
+            <BlankLink class="nav-link" href={url}>
               {label}
             </BlankLink>
           ) : (
-            <a class="footer-link" href={url}>
+            <a class="nav-link" href={url}>
               {label}
             </a>
           )}
@@ -36,27 +33,26 @@ if (footerLinks) {
       ))
     }
   </ul>
-</footer>
+</nav>
 
 <style>
-  footer {
-    margin-block: 4rem;
-    border-top: 1px solid var(--color-border);
-  }
-
-  .footer-link-list {
+  .nav-list {
     margin: 0;
     padding: 0;
-    list-style: none;
+    margin-block: 0.75rem;
     display: flex;
-    gap: 1rem;
+    gap: 1.5rem;
   }
 
-  .footer-link {
+  .nav-item {
+    list-style: none;
+  }
+
+  .nav-link {
     text-decoration: none;
   }
-  .footer-link:hover {
+
+  .nav-link:hover {
     text-decoration: underline;
   }
 </style>
-

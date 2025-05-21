@@ -1,0 +1,90 @@
+---
+import { getCollection, render } from "astro:content";
+import getReadingTime from "reading-time";
+import AboutLayout from "../layouts/about.astro";
+import NowLayout from "../layouts/now.astro";
+import WritingLayout from "../layouts/writing.astro";
+import ProjectLayout from "../layouts/project.astro";
+import DefaultLayout from "../layouts/default.astro";
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const excludedDir = [];
+  const excludePostIds = ["bio"];
+
+  const posts = await getCollection("posts", ({ data, filePath, id }) => {
+    if (data.draft) {
+      return false;
+    }
+
+    if (excludePostIds.includes(id)) {
+      return false;
+    }
+
+    if (!data?.category) {
+      return false;
+    }
+
+    return true;
+  });
+
+  return posts.map((post) => {
+    return {
+      params: { slug: post.id },
+      props: {
+        post,
+      },
+    };
+  });
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+
+const layout = post.data.category || "default";
+
+const readingTime = getReadingTime(post.body ?? "")?.text || "";
+post.data.readingTime = readingTime;
+---
+
+{
+  layout === "writing" ? (
+    <WritingLayout data={post.data} headings={headings}>
+      <Content />
+    </WritingLayout>
+  ) : null
+}
+
+{
+  layout === "project" ? (
+    <ProjectLayout data={post.data}>
+      <Content />
+    </ProjectLayout>
+  ) : null
+}
+
+{
+  layout === "about" ? (
+    <AboutLayout data={post.data} headings={headings}>
+      <Content />
+    </AboutLayout>
+  ) : null
+}
+
+{
+  layout === "now" ? (
+    <NowLayout data={post.data}>
+      <Content />
+    </NowLayout>
+  ) : null
+}
+
+{
+  layout === "default" ? (
+    <DefaultLayout data={post.data} headings={headings}>
+      <Content />
+    </DefaultLayout>
+  ) : null
+}
+
