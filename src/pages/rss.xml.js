@@ -10,8 +10,6 @@ export async function GET(context) {
 
     return data?.category === 'writing';
   });
-    
-  });
 
   return rss({
     title: 'Dhiraj Arun',
@@ -20,7 +18,7 @@ export async function GET(context) {
     items: writing.map(post => ({
       title: post.data.title,
       pubDate: post.data.publishDate,
-      link: `/writing/${post.id}`,
+      link: `${post.id}`,
       content: sanitizeHtml(post.rendered.html),
     })),
   });
