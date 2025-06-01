@@ -3,7 +3,15 @@ import { getCollection } from 'astro:content';
 import sanitizeHtml from 'sanitize-html';
 
 export async function GET(context) {
-  const writing = await getCollection('writing');
+  const writing = await getCollection('posts', ({ data }) => {
+    if (data.draft) {
+      return false;
+    }
+
+    return data?.category === 'writing';
+  });
+    
+  });
 
   return rss({
     title: 'Dhiraj Arun',
