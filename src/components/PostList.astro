@@ -17,6 +17,10 @@ function postDateString(date: Date) {
 }
 
 const { posts } = Astro.props;
+posts.sort(
+  (after, before) =>
+    before.meta?.publishDate?.getTime() - after.meta?.publishDate?.getTime(),
+);
 ---
 
 <ul class="post-list">

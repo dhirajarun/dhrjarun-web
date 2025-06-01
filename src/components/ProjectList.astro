@@ -4,13 +4,14 @@ type Props = {
     url: string;
     title: string;
     meta: {
-      start: string;
-      end?: string;
+      start: number;
+      end?: number;
     };
   }[];
 };
 
 const { projects } = Astro.props;
+projects.sort((a, b) => b.meta?.start - a.meta?.start);
 ---
 
 <ul class="project-list">

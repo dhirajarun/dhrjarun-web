@@ -1,0 +1,117 @@
+---
+import Page from "../layouts/Page.astro";
+import { getCollection } from "astro:content";
+import TCLayout from "../components/TCLayout.astro";
+import PostList from "../components/PostList.astro";
+import ProjectList from '../components/ProjectList.astro';
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const excluedCategories = ["about", "now", "default"];
+
+  const entries = await getCollection("posts", ({ data }) => {
+    if (data.draft) {
+      return false;
+    }
+
+    if (data.archive) {
+      return false;
+    }
+
+    return true;
+  });
+
+  const posts: typeof entries = [];
+  const categories: Record<string, (typeof entries)[0]> = {};
+
+  entries.forEach((post) => {
+    const categoryRegex = /^\/?categories\/(.+)\/?/;
+    const match = post.id.match(categoryRegex);
+
+    if (match) {
+      const cName = match?.[1];
+
+      categories[cName] = post;
+      return;
+    }
+
+    if (
+      post.data?.category &&
+      !excluedCategories.includes(post.data.category)
+    ) {
+      posts.push(post);
+    }
+  });
+
+  const postsGroupedByCategory: Record<string, typeof entries> = {};
+
+  posts.forEach((post) => {
+    const cateogryName = post.data?.category;
+    if (!cateogryName) {
+      return;
+    }
+
+    const category = postsGroupedByCategory[cateogryName];
+    if (!category) {
+      postsGroupedByCategory[cateogryName] = [];
+    }
+
+    postsGroupedByCategory[cateogryName].push(post);
+  });
+
+
+  return Object.entries(postsGroupedByCategory).map(([categoryName, posts]) => {
+    const category = categories[categoryName];
+
+    return {
+      params: { categoryName },
+      props: {
+        category,
+        posts,
+        categoryName,
+      },
+    };
+  });
+}
+
+const { posts, category, categoryName } = Astro.props;
+
+const postList = posts.map((post) => {
+  const { title, tags = [], ...meta } = post.data;
+
+  return {
+    url: `/${post.id}`,
+    title,
+    tags,
+    meta,
+  };
+});
+
+const categoryListMap: Record<string, string> = {
+  default: "post-list",
+  projects: "project-list",
+}
+
+const listType = categoryListMap[categoryName] || "post-list";
+
+const title = category?.data?.title || "Forgot to set title";
+---
+
+<Page title={title}>
+  <TCLayout>
+    <h1 slot="header">{title}</h1>
+
+    {
+      listType === "post-list" ? (
+        <PostList posts={postList} />
+      ) : null
+    }
+
+    {
+      listType === "project-list" ? (
+        <ProjectList projects={postList} />
+      ) : null
+    }
+  </TCLayout>
+</Page>
